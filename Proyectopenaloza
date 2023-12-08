@@ -1,0 +1,73 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+// Declaraciones de funciones
+void cargarDiccionario(vector<string> &diccionario, const string &archivoDiccionario);
+string generarPalabra(const vector<string> &diccionario);
+bool buscarPalabra(const vector<string> &diccionario, const string &palabra);
+
+int main() {
+    // Inicialización
+    srand(time(0));
+
+    // Declaración e inicialización de variables
+    vector<string> diccionario;
+    string archivoDiccionario = "diccionario.txt"; // Reemplaza con tu archivo de diccionario
+
+    // Cargar diccionario desde el archivo
+    cargarDiccionario(diccionario, archivoDiccionario);
+
+    // Generar y buscar palabras en el diccionario
+    for (int i = 0; i < 5; ++i) {
+        string palabraGenerada = generarPalabra(diccionario);
+        cout << "Palabra generada: " << palabraGenerada << endl;
+
+        if (buscarPalabra(diccionario, palabraGenerada)) {
+            cout << "¡Palabra encontrada en el diccionario!" << endl;
+        } else {
+            cout << "Palabra no encontrada en el diccionario." << endl;
+        }
+
+        cout << "-------------------------" << endl;
+    }
+
+    return 0;
+}
+
+void cargarDiccionario(vector<string> &diccionario, const string &archivoDiccionario) {
+    // Cargar el diccionario desde el archivo
+    ifstream archivo(archivoDiccionario);
+
+    if (archivo.is_open()) {
+        string palabra;
+        while (getline(archivo, palabra)) {
+            diccionario.push_back(palabra);
+        }
+
+        archivo.close();
+    } else {
+        cout << "No se pudo abrir el archivo: " << archivoDiccionario << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+string generarPalabra(const vector<string> &diccionario) {
+    // Generar una palabra aleatoria del diccionario
+    int indice = rand() % diccionario.size();
+    return diccionario[indice];
+}
+
+bool buscarPalabra(const vector<string> &diccionario, const string &palabra) {
+    // Buscar la palabra en el diccionario
+    for (const string &diccPalabra : diccionario) {
+        if (diccPalabra == palabra) {
+            return true;
+        }
+    }
+    return false;
+}
